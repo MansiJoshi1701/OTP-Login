@@ -1,8 +1,10 @@
 import {useState} from 'react'
+import OTPinput from './OTPinput';
 
 const PhoneLogin = () => {
     
     const [phoneNumber, setPhoneNumber] = useState("");
+    const [showOTPinput , setShowOTPinput] = useState(false);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -14,14 +16,21 @@ const PhoneLogin = () => {
 
         else{
             //Call Backend API to send the OTP to the given phoneNumber
+
             //Display the OTP entering window
+            setShowOTPinput(true);
         }
 
     }
 
+    const onOTPsubmit = () => {
+
+        console.log("Login successfull");
+    }
+
     return (
         <div>
-            <form onSubmit={handleSubmit}>
+            {!showOTPinput ? <form onSubmit={handleSubmit}>
                 <input
                 type="text"
                 value={phoneNumber}
@@ -29,7 +38,10 @@ const PhoneLogin = () => {
                 placeholder='Enter Phone Number'
                 />
                 <button type='Submit'>Submit</button>
-            </form>
+            </form> : <div>
+                    <p>OTP sent to phone number : {phoneNumber}</p>
+                    <OTPinput length={4} onOTPsubmit={onOTPsubmit}/>
+                </div>}
 
         </div>
     )
