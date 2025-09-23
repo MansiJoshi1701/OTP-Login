@@ -39,7 +39,13 @@ function OTPinput( {length , onOTPsubmit} ) {
     const handleClick = () => {};
 
     //To improve user experience - on pressing baclspace control should go to previous cell
-    const handleKeyDown = () => {};
+    const handleKeyDown = (index , e) => {
+        
+        if(e.key === 'Backspace' && !otp[index] && index > 0 && inputRefs.current[index-1]){
+
+            inputRefs.current[index-1].focus();
+        }
+    };
 
   return (
     <div>
