@@ -4,7 +4,7 @@ function OTPinput( {length , onOTPsubmit} ) {
 
     const [otp , setOTP] = useState(new Array(length).fill(""));
     const inputRefs = useRef([])
-    
+
 
     //To focus on the 1st input field
     useEffect(() => {
@@ -16,19 +16,29 @@ function OTPinput( {length , onOTPsubmit} ) {
     const handleChange = (index , e) => {
 
         const num = e.target.value;
-        if(isNaN(num)) return; //if typed value is not a number
 
+        //1. Check if typed value is not a number
+        if(isNaN(num)) return; 
+
+        //2. Update the otp a/c the recent value typed
         const newOtp = [...otp]; //otp & newOtp are both arrays. So otp = newOtp = ["1" , "5" , " 2" , "3"]
         newOtp[index] = num.substring(num.length-1); //we only want to take the most recent typed value
         setOTP(newOtp);
 
-        //we need to convert the newOtp[] to a simple string variable before submitting it
+        //3. Convert the newOtp[] to a simple string variable before submitting it
         const finalOTP = newOtp.join(""); //finalOTP = "1523"
         if(finalOTP.length == length) onOTPsubmit(finalOTP);
+
+        //4. Improve user experience - control should move to next input box immediately
+        if(num && index < length-1 && inputRefs.current[index+1]){
+            inputRefs.current[index+1].focus();
+        }
 
     };
 
     const handleClick = () => {};
+
+    //To improve user experience - on pressing baclspace control should go to previous cell
     const handleKeyDown = () => {};
 
   return (
