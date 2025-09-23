@@ -20,7 +20,7 @@ function OTPinput( {length , onOTPsubmit} ) {
         //1. Check if typed value is not a number
         if(isNaN(num)) return; 
 
-        //2. Update the otp a/c the recent value typed
+        //2. Update the otp with the recent value typed
         const newOtp = [...otp]; //otp & newOtp are both arrays. So otp = newOtp = ["1" , "5" , " 2" , "3"]
         newOtp[index] = num.substring(num.length-1); //we only want to take the most recent typed value
         setOTP(newOtp);
@@ -29,16 +29,28 @@ function OTPinput( {length , onOTPsubmit} ) {
         const finalOTP = newOtp.join(""); //finalOTP = "1523"
         if(finalOTP.length == length) onOTPsubmit(finalOTP);
 
-        //4. Improve user experience - control should move to next input box immediately
+        //4. Improve user experience - control should move to next input box if current is filled
         if(num && index < length-1 && inputRefs.current[index+1]){
             inputRefs.current[index+1].focus();
         }
 
     };
 
-    const handleClick = () => {};
+    //To improve user experience
+    const handleClick = (index) => {
 
-    //To improve user experience - on pressing baclspace control should go to previous cell
+        //the cursor should always come after the value typed
+        inputRefs.current[index].setSelectionRange(1,1);
+
+        //if any input is empty then control will jump to the 1st empty state
+        if(index){
+            inputRefs.current[otp.indexOf("")].focus();
+        }
+
+    };
+
+
+    //To improve user experience - on pressing backspace control should go to previous cell
     const handleKeyDown = (index , e) => {
         
         if(e.key === 'Backspace' && !otp[index] && index > 0 && inputRefs.current[index-1]){
